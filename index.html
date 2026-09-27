@@ -539,15 +539,15 @@
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label for="mod_contractCode">Contract Code</label>
-                        <input type="text" id="mod_contractCode" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value)">
+                        <input type="text" id="mod_contractCode" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label for="mod_eventName">Event Name</label>
-                        <input type="text" id="mod_eventName" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value)">
+                        <input type="text" id="mod_eventName" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label for="mod_eventDate">Event Date</label>
-                        <input type="date" id="mod_eventDate" class="event-date-input" onchange="syncEventDates(this.value)">
+                        <input type="date" id="mod_eventDate" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
             </section>
@@ -627,7 +627,7 @@
                 </div>
                 <div class="field-group">
                     <label>Completion Date</label>
-                    <input type="date" class="signoff-date-input" readonly>
+                    <input type="date" class="signoff-date-input">
                 </div>
             </div>
 
@@ -667,15 +667,15 @@
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label>Contract Code</label>
-                        <input type="text" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value)">
+                        <input type="text" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label>Event Name</label>
-                        <input type="text" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value)">
+                        <input type="text" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label>Event Date</label>
-                        <input type="date" class="event-date-input" onchange="syncEventDates(this.value)">
+                        <input type="date" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
             </section>
@@ -775,7 +775,7 @@
                 </div>
                 <div class="field-group">
                     <label>Completion Date</label>
-                    <input type="date" class="signoff-date-input" readonly>
+                    <input type="date" class="signoff-date-input">
                 </div>
             </div>
 
@@ -815,15 +815,15 @@
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label>Contract Code</label>
-                        <input type="text" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value)">
+                        <input type="text" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label>Event Name</label>
-                        <input type="text" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value)">
+                        <input type="text" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label>Event Date</label>
-                        <input type="date" class="event-date-input" onchange="syncEventDates(this.value)">
+                        <input type="date" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
             </section>
@@ -879,7 +879,7 @@
                 </div>
                 <div class="field-group">
                     <label>Completion Date</label>
-                    <input type="date" class="signoff-date-input" readonly>
+                    <input type="date" class="signoff-date-input">
                 </div>
             </div>
 
@@ -919,15 +919,15 @@
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label>Contract Code</label>
-                        <input type="text" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value)">
+                        <input type="text" class="contract-code-input" placeholder="e.g. 250814MS" oninput="syncContractCodes(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label>Event Name</label>
-                        <input type="text" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value)">
+                        <input type="text" class="event-name-input" placeholder="Event Name / Performance Title" oninput="syncEventNames(this.value, this)">
                     </div>
                     <div class="field-group">
                         <label>Event Date</label>
-                        <input type="date" class="event-date-input" onchange="syncEventDates(this.value)">
+                        <input type="date" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
             </section>
@@ -1001,7 +1001,7 @@
                 </div>
                 <div class="field-group">
                     <label>Completion Date</label>
-                    <input type="date" class="signoff-date-input" readonly>
+                    <input type="date" class="signoff-date-input">
                 </div>
             </div>
 
@@ -1054,9 +1054,9 @@
                 input.value = today;
             });
 
-            syncContractCodes('');
-            syncEventNames('');
-            syncEventDates('');
+            syncContractCodes('', null);
+            syncEventNames('', null);
+            syncEventDates('', null);
 
             // Attach dynamic auto-expand on typing
             document.querySelectorAll('textarea').forEach(textarea => {
@@ -1128,19 +1128,31 @@
         }
 
         // Synchronization Helpers for Contract Code, Event Name, Event Date
-        function syncContractCodes(val) {
-            document.querySelectorAll('.contract-code-input').forEach(input => input.value = val);
+        function syncContractCodes(val, sourceEl) {
+            document.querySelectorAll('.contract-code-input').forEach(input => {
+                if (input !== sourceEl && input !== document.activeElement) {
+                    input.value = val;
+                }
+            });
             document.querySelectorAll('.footerContractCodeLabel').forEach(label => {
                 label.innerText = `Contract Code: ${val ? val : 'N/A'}`;
             });
         }
 
-        function syncEventNames(val) {
-            document.querySelectorAll('.event-name-input').forEach(input => input.value = val);
+        function syncEventNames(val, sourceEl) {
+            document.querySelectorAll('.event-name-input').forEach(input => {
+                if (input !== sourceEl && input !== document.activeElement) {
+                    input.value = val;
+                }
+            });
         }
 
-        function syncEventDates(val) {
-            document.querySelectorAll('.event-date-input').forEach(input => input.value = val);
+        function syncEventDates(val, sourceEl) {
+            document.querySelectorAll('.event-date-input').forEach(input => {
+                if (input !== sourceEl && input !== document.activeElement) {
+                    input.value = val;
+                }
+            });
         }
 
         // Print Functions
