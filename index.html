@@ -308,12 +308,7 @@
             background-size: 100% 28px;
             overflow-y: hidden;
         }
-
-        textarea.textarea-small { min-height: 80px; }
-        textarea.textarea-large { min-height: 140px; }
-        textarea.textarea-xlarge { min-height: 190px; }
-
-        /* Dynamic Writing Space Expansion Mode */
+        // Dynamic Writing Space Expansion Mode
         body.expanded-writing-area textarea {
             min-height: 260px !important;
         }
@@ -325,6 +320,11 @@
         }
         body.expanded-writing-area textarea.textarea-small {
             min-height: 150px !important;
+        }
+
+        /* iPad / Canvas rendering compatibility class */
+        body.rendering-pdf textarea {
+            background-image: none !important;
         }
 
         .checkbox-grid {
@@ -1239,7 +1239,7 @@
         }
 
         // Generate and download a PDF of the current active form
-        function downloadActiveFormPDF() {
+        async function downloadActiveFormPDF() {
             if (!currentActiveTab) {
                 alert('Please select a form tab first before saving PDF.');
                 return;
@@ -1254,18 +1254,33 @@
             const tabName = (tabDisplayNames[activeTab] || activeTab).replace(/[^a-zA-Z0-9]/g, '_');
             const filename = `${tabName}_${eventName}_${eventDate}.pdf`;
 
-            if (window.html2pdf) {
-                const opt = {
-                    margin:       [8, 8, 8, 8],
-                    filename:     filename,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true },
-                    jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
-                };
-                html2pdf().set(opt).from(formCard).save();
-            } else {
-                printSingleForm();
+            // Detect iPad, iPadOS, iPhone or touch Mac devices
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+            document.body.classList.add('rendering-pdf');
+
+            try {
+                if (window.html2pdf && !isIOS) {
+                    const opt = {
+                        margin:       [8, 8, 8, 8],
+                        filename:     filename,
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 1.5, useCORS: true, logging: false },
+                        jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+                    };
+                    await html2pdf().set(opt).from(formCard).save();
+                    document.body.classList.remove('rendering-pdf');
+                    return;
+                }
+            } catch (err) {
+                console.warn('html2pdf generation failed on device, using native print fallback:', err);
             }
+
+            document.body.classList.remove('rendering-pdf');
+
+            // Fallback for iPad/iOS Safari or when html2pdf fails:
+            // Native print sheet on iPad lets users pinch-to-zoom on preview or tap Share -> Save as PDF
+            printSingleForm();
         }
 
         // Download PDF and launch pre-addressed email client draft
