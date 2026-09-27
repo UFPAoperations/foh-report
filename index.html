@@ -803,10 +803,9 @@
             <!-- Event Staff Crew Roster & Counts -->
             <section>
                 <div class="section-title">Event Staff Roster & Crew Counts</div>
-                <div class="grid-4" style="margin-bottom: 14px;">
-                    <div class="field-group"><label for="es_lead1">Event Staff 1 Lead</label><input type="text" id="es_lead1" placeholder="Lead Name"></div>
+                <div class="grid-3" style="margin-bottom: 14px;">
+                    <div class="field-group"><label for="es_lead">Event Staff Lead</label><input type="text" id="es_lead" placeholder="Lead Name"></div>
                     <div class="field-group"><label for="es_count1">Event Staff 1 Count</label><input type="text" id="es_count1" placeholder="Crew Count"></div>
-                    <div class="field-group"><label for="es_lead2">Event Staff 2 Lead</label><input type="text" id="es_lead2" placeholder="Lead Name"></div>
                     <div class="field-group"><label for="es_count2">Event Staff 2 Count</label><input type="text" id="es_count2" placeholder="Crew Count"></div>
                 </div>
             </section>
@@ -1146,9 +1145,8 @@
             document.getElementById('ush_completedBy').value = 'Michael Ross, Head Usher';
 
             // Event Staff Form Data
-            document.getElementById('es_lead1').value = 'David Miller';
+            document.getElementById('es_lead').value = 'David Miller';
             document.getElementById('es_count1').value = '14 Crew Members';
-            document.getElementById('es_lead2').value = 'Jessica Vance';
             document.getElementById('es_count2').value = '8 Crew Members';
             document.getElementById('es_ufpd').value = 'UFPD: 3 Officers (Officer Thomas Lead)';
             document.getElementById('es_nonUfpd').value = 'GPD Traffic Detail: 2 Officers';
@@ -1235,17 +1233,33 @@
                 if (compInput) completedBy = compInput.value;
             }
 
+            // Check operational status flags for urgent alert indicators (Red Exclamation / Alarm Emoji)
+            let alertPrefix = '';
+            let alertNotice = '';
+            const chkDebrief = document.getElementById('mod_chkDebrief')?.checked;
+            const chkIncident = document.getElementById('mod_chkIncident')?.checked;
+
+            const flaggedItems = [];
+            if (chkDebrief) flaggedItems.push('DEBRIEF NEEDED');
+            if (chkIncident) flaggedItems.push('MAJOR INCIDENT OCCURRED');
+
+            if (flaggedItems.length > 0) {
+                alertPrefix = `🚨 [${flaggedItems.join(' & ')}] `;
+                alertNotice = `\n\n🚨 ATTENTION REQUIRED / FLAG NOTICE:\nThis report has been flagged for: ${flaggedItems.join(' | ')}. Please review the attached PDF immediately.`;
+            }
+
             // Step 1: Trigger PDF download
             downloadActiveFormPDF();
 
             // Step 2: Open mail draft pre-filled with Recipients, Subject, and Body
-            const recipients = 'gposner@performingarts.ufl.edu,mburkett@performingarts.ufl.edu';
-            const subject = `${reportName} - Contract Code: ${contractCode} - ${eventName}`;
+            const recipients = 'gposner@performingarts.ufl.edu,mburkett@performingarts.ufl.edu,AlexandraBaxter@performingarts.ufl.edu';
+            const subject = `${alertPrefix}${reportName} - Contract Code: ${contractCode} - ${eventName}`;
             
             let body = `Hello,\n\nPlease find attached the completed ${reportName} for ${eventName}`;
             if (eventDate) body += ` on ${eventDate}`;
             body += `.\n\nContract Code: ${contractCode}`;
             if (completedBy) body += `\nSubmitted By: ${completedBy}`;
+            if (alertNotice) body += alertNotice;
             body += `\n\n(Note: The PDF report has been downloaded to your device. Please attach it to this email.)\n\nThank you!`;
 
             const mailtoUrl = `mailto:${recipients}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
