@@ -115,17 +115,6 @@
             color: var(--burnt-orange);
         }
 
-        .btn-combined {
-            background-color: #ffffff;
-            color: var(--primary);
-            border: 1px solid var(--border);
-        }
-        .btn-combined:hover {
-            background-color: var(--border-light);
-            border-color: var(--burnt-orange);
-            color: var(--burnt-orange);
-        }
-
         /* Form Selector Tabs */
         .form-tabs {
             display: flex;
@@ -209,19 +198,6 @@
             margin-top: 3px;
             letter-spacing: 0.5px;
             font-weight: 600;
-        }
-
-        .badge-tag {
-            background-color: var(--accent-light);
-            color: var(--burnt-orange);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            border: 1px solid rgba(202, 81, 22, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            white-space: nowrap;
         }
 
         /* Section Title Styling */
@@ -388,8 +364,20 @@
             gap: 20px;
         }
 
-        .print-footer {
-            display: none;
+        /* Form Footer Bar (Visible on screen and in PDF/Print) */
+        .form-footer-bar {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 2px solid var(--burnt-orange);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--burnt-orange);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         @media print {
@@ -399,11 +387,10 @@
                 margin: 0;
             }
 
-            .top-nav, .action-bar-bottom {
+            .top-nav {
                 display: none !important;
             }
 
-            /* Print All Forms vs Single Form behavior */
             body.print-combined .form-card {
                 display: block !important;
                 page-break-after: always;
@@ -443,24 +430,6 @@
                 opacity: 0 !important;
                 -webkit-text-fill-color: transparent !important;
             }
-
-            .print-footer {
-                display: flex !important;
-                justify-content: space-between;
-                align-items: center;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                width: 100%;
-                padding-top: 6px;
-                border-top: 1.5px solid var(--burnt-orange);
-                color: var(--burnt-orange);
-                font-size: 0.78rem;
-                font-weight: 700;
-                background: #ffffff;
-                letter-spacing: 0.5px;
-            }
         }
 
         .division-info-banner {
@@ -481,7 +450,7 @@
             color: var(--primary);
         }
 
-        /* Submission Helper Callout Banner & Flashing Button Animation */
+        /* Flashing Button Animation */
         @keyframes pulse-button {
             0%, 100% {
                 transform: scale(1);
@@ -612,7 +581,11 @@
                     <div class="field-group"><label>Event Staff Lead 1</label><input type="text" id="mod_estaffLead1" placeholder="Lead Name"></div>
                     <div class="field-group"><label>Receptionist</label><input type="text" placeholder="Name"></div>
                     <div class="field-group"><label>Stage Supervisor</label><input type="text" placeholder="Name"></div>
-                    <div class="field-group"><label>Facility Services Lead</label><input type="text" placeholder="Lead Name"></div>
+                    <div class="field-group"><label>Custodial</label><input type="text" placeholder="Lead / Staff Name"></div>
+                    <div class="field-group full-width" style="grid-column: 1 / -1; margin-top: 6px;">
+                        <label for="mod_otherKeyStaff">Other Key Staff</label>
+                        <textarea id="mod_otherKeyStaff" class="textarea-small" placeholder="Detail additional key staff, merch, box office leads, technicians, or backstage personnel..."></textarea>
+                    </div>
                 </div>
             </section>
 
@@ -637,7 +610,7 @@
             <section>
                 <div class="section-title">Department Sync & Client Feedback</div>
                 <div class="field-group" style="margin-bottom: 14px;">
-                    <label for="mod_deptNotes">Manager Operational Sync Notes</label>
+                    <label for="mod_deptNotes">MOD Notes</label>
                     <textarea id="mod_deptNotes" class="textarea-large" placeholder="Cross-departmental synchronization notes, facility issues, concessions/bar flow, box office sync..."></textarea>
                 </div>
                 <div class="field-group">
@@ -668,6 +641,13 @@
             <div style="margin-top: 12px; display: flex; justify-content: flex-end; gap: 10px;">
                 <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
                 <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+            </div>
+
+            <!-- Form Footer Bar -->
+            <div class="form-footer-bar">
+                <span class="footerContractCodeLabel">Contract Code: N/A</span>
+                <span>University of Florida Performing Arts - Gainesville, Florida</span>
+                <span>Front of House Shift Report Suite</span>
             </div>
         </div>
 
@@ -702,7 +682,16 @@
 
             <!-- Timings & Attendance -->
             <section>
-                <div class="section-title">Event Schedule & Attendance</div>
+                <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Event Schedule & Attendance</span>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 10px;" onclick="toggleShowSet(2)">➕ 2nd Set / Show Timings</button>
+                        <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 10px;" onclick="toggleShowSet(3)">➕ 3rd Set / Show Timings</button>
+                    </div>
+                </div>
+
+                <!-- Set 1 Timings -->
+                <div style="font-weight: 700; font-size: 0.8rem; color: var(--burnt-orange); margin-bottom: 6px;">Show / Set 1 Timings</div>
                 <div class="grid-4" style="margin-bottom: 16px;">
                     <div class="field-group"><label>Lobby Open</label><input type="time" id="ush_lobbyOpen"></div>
                     <div class="field-group"><label>House Open</label><input type="time" id="ush_houseOpen"></div>
@@ -713,23 +702,55 @@
                     <div class="field-group"><label>Venue Clear</label><input type="time" id="ush_venueClear"></div>
                     <div class="field-group"><label>Lobby Clear</label><input type="time" id="ush_lobbyClear"></div>
                 </div>
-                <div class="grid-2">
+
+                <!-- Optional Set 2 Timings -->
+                <div id="set2_container" style="display: none; background-color: #f8fafc; padding: 12px; border-radius: 8px; border: 1px dashed var(--burnt-orange); margin-bottom: 16px;">
+                    <div style="font-weight: 700; font-size: 0.8rem; color: var(--burnt-orange); margin-bottom: 6px;">Show / Set 2 Timings</div>
+                    <div class="grid-4">
+                        <div class="field-group"><label>Lobby Open (Set 2)</label><input type="time" id="ush_lobbyOpen_s2"></div>
+                        <div class="field-group"><label>House Open (Set 2)</label><input type="time" id="ush_houseOpen_s2"></div>
+                        <div class="field-group"><label>Event Start (Set 2)</label><input type="time" id="ush_eventStart_s2"></div>
+                        <div class="field-group"><label>Intermission (Set 2)</label><input type="time" id="ush_intermission_s2"></div>
+                        <div class="field-group"><label>2nd Act (Set 2)</label><input type="time" id="ush_act2Start_s2"></div>
+                        <div class="field-group"><label>Event End (Set 2)</label><input type="time" id="ush_eventEnd_s2"></div>
+                        <div class="field-group"><label>Venue Clear (Set 2)</label><input type="time" id="ush_venueClear_s2"></div>
+                        <div class="field-group"><label>Lobby Clear (Set 2)</label><input type="time" id="ush_lobbyClear_s2"></div>
+                    </div>
+                </div>
+
+                <!-- Optional Set 3 Timings -->
+                <div id="set3_container" style="display: none; background-color: #f8fafc; padding: 12px; border-radius: 8px; border: 1px dashed var(--burnt-orange); margin-bottom: 16px;">
+                    <div style="font-weight: 700; font-size: 0.8rem; color: var(--burnt-orange); margin-bottom: 6px;">Show / Set 3 Timings</div>
+                    <div class="grid-4">
+                        <div class="field-group"><label>Lobby Open (Set 3)</label><input type="time" id="ush_lobbyOpen_s3"></div>
+                        <div class="field-group"><label>House Open (Set 3)</label><input type="time" id="ush_houseOpen_s3"></div>
+                        <div class="field-group"><label>Event Start (Set 3)</label><input type="time" id="ush_eventStart_s3"></div>
+                        <div class="field-group"><label>Intermission (Set 3)</label><input type="time" id="ush_intermission_s3"></div>
+                        <div class="field-group"><label>2nd Act (Set 3)</label><input type="time" id="ush_act2Start_s3"></div>
+                        <div class="field-group"><label>Event End (Set 3)</label><input type="time" id="ush_eventEnd_s3"></div>
+                        <div class="field-group"><label>Venue Clear (Set 3)</label><input type="time" id="ush_venueClear_s3"></div>
+                        <div class="field-group"><label>Lobby Clear (Set 3)</label><input type="time" id="ush_lobbyClear_s3"></div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-bottom: 14px;">
                     <div class="field-group"><label for="ush_houseCount">House Count (Total Attendance)</label><input type="text" id="ush_houseCount" placeholder="e.g. 1,420 guests"></div>
                     <div class="field-group"><label for="ush_adaCount">ADA Patrons Served</label><input type="text" id="ush_adaCount" placeholder="e.g. 14 wheelchair escorts, 6 ALDs"></div>
+                </div>
+
+                <div class="field-group">
+                    <label for="ush_scheduleNotes">Additional Schedule & Attendance Notes</label>
+                    <textarea id="ush_scheduleNotes" class="textarea-small" placeholder="Notes regarding late starts, schedule adjustments, multi-show turnarounds, or crowd entry delays..."></textarea>
                 </div>
             </section>
 
             <!-- Usher Deployment Roster -->
             <section>
                 <div class="section-title">Usher Deployment & Positioning</div>
-                <div class="grid-3" style="margin-bottom: 14px;">
+                <div class="grid-3">
                     <div class="field-group"><label>Head Usher Name</label><input type="text" id="ush_leadName" placeholder="Head Usher Name"></div>
-                    <div class="field-group"><label>Assistant Head Usher</label><input type="text" placeholder="Name"></div>
-                    <div class="field-group"><label>Usher Staff Count</label><input type="text" placeholder="Total ushers on duty"></div>
-                </div>
-                <div class="grid-2">
-                    <div class="field-group"><label>Orchestra / Main Floor Leads</label><input type="text" placeholder="Lead names & posts"></div>
-                    <div class="field-group"><label>Balcony / Loge Leads</label><input type="text" placeholder="Lead names & posts"></div>
+                    <div class="field-group"><label>Orchestra Usher Count</label><input type="text" id="ush_orchUsherCount" placeholder="e.g. 12 ushers"></div>
+                    <div class="field-group"><label>Mezz/Balcony Usher Count</label><input type="text" id="ush_mezzUsherCount" placeholder="e.g. 8 ushers"></div>
                 </div>
             </section>
 
@@ -768,6 +789,13 @@
             <div style="margin-top: 12px; display: flex; justify-content: flex-end; gap: 10px;">
                 <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
                 <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+            </div>
+
+            <!-- Form Footer Bar -->
+            <div class="form-footer-bar">
+                <span class="footerContractCodeLabel">Contract Code: N/A</span>
+                <span>University of Florida Performing Arts - Gainesville, Florida</span>
+                <span>Front of House Shift Report Suite</span>
             </div>
         </div>
 
@@ -865,6 +893,13 @@
             <div style="margin-top: 12px; display: flex; justify-content: flex-end; gap: 10px;">
                 <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
                 <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+            </div>
+
+            <!-- Form Footer Bar -->
+            <div class="form-footer-bar">
+                <span class="footerContractCodeLabel">Contract Code: N/A</span>
+                <span>University of Florida Performing Arts - Gainesville, Florida</span>
+                <span>Front of House Shift Report Suite</span>
             </div>
         </div>
 
@@ -981,19 +1016,28 @@
                 <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
                 <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
             </div>
+
+            <!-- Form Footer Bar -->
+            <div class="form-footer-bar">
+                <span class="footerContractCodeLabel">Contract Code: N/A</span>
+                <span>University of Florida Performing Arts - Gainesville, Florida</span>
+                <span>Front of House Shift Report Suite</span>
+            </div>
         </div>
 
-    </div>
-
-    <!-- Print Running Footer -->
-    <div class="print-footer" id="printFooter">
-        <span id="footerContractText">Contract Code: N/A</span>
-        <span>Front of House Shift Report Suite</span>
     </div>
 
     <script>
         let currentActiveTab = null;
         let isWritingAreaExpanded = false;
+
+        function toggleShowSet(setNumber) {
+            const container = document.getElementById(`set${setNumber}_container`);
+            if (container) {
+                const isHidden = container.style.display === 'none' || container.style.display === '';
+                container.style.display = isHidden ? 'block' : 'none';
+            }
+        }
 
         const tabDisplayNames = {
             'mod': 'Manager On Duty',
@@ -1086,10 +1130,9 @@
         // Synchronization Helpers for Contract Code, Event Name, Event Date
         function syncContractCodes(val) {
             document.querySelectorAll('.contract-code-input').forEach(input => input.value = val);
-            const footerText = document.getElementById('footerContractText');
-            if (footerText) {
-                footerText.innerText = `Contract Code: ${val ? val : 'N/A'}`;
-            }
+            document.querySelectorAll('.footerContractCodeLabel').forEach(label => {
+                label.innerText = `Contract Code: ${val ? val : 'N/A'}`;
+            });
         }
 
         function syncEventNames(val) {
