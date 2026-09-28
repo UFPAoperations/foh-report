@@ -225,28 +225,44 @@
             border-radius: 2px;
         }
 
+        /* Flexbox Layouts for 100% Canvas & html2canvas / Chrome PDF Compatibility */
         .grid-header-3 {
-            display: grid;
-            grid-template-columns: 1.1fr 2.4fr 1.1fr;
+            display: flex;
+            flex-wrap: wrap;
             gap: 14px 18px;
         }
+        .grid-header-3 > .field-group:nth-child(1) { flex: 1 1 22%; min-width: 150px; }
+        .grid-header-3 > .field-group:nth-child(2) { flex: 2 1 45%; min-width: 220px; }
+        .grid-header-3 > .field-group:nth-child(3) { flex: 1 1 22%; min-width: 150px; }
 
         .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-wrap: wrap;
             gap: 14px 20px;
+        }
+        .grid-2 > .field-group, .grid-2 > div {
+            flex: 1 1 calc(50% - 10px);
+            min-width: 240px;
         }
 
         .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
+            flex-wrap: wrap;
             gap: 14px 18px;
+        }
+        .grid-3 > .field-group, .grid-3 > div {
+            flex: 1 1 calc(33.333% - 12px);
+            min-width: 200px;
         }
 
         .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex;
+            flex-wrap: wrap;
             gap: 12px 16px;
+        }
+        .grid-4 > .field-group, .grid-4 > div {
+            flex: 1 1 calc(25% - 12px);
+            min-width: 140px;
         }
 
         .field-group {
@@ -256,7 +272,8 @@
         }
 
         .field-group.full-width {
-            grid-column: 1 / -1;
+            width: 100%;
+            flex: 1 1 100% !important;
         }
 
         label {
@@ -308,7 +325,7 @@
             background-size: 100% 28px;
             overflow-y: hidden;
         }
-        // Dynamic Writing Space Expansion Mode
+
         body.expanded-writing-area textarea {
             min-height: 260px !important;
         }
@@ -322,20 +339,25 @@
             min-height: 150px !important;
         }
 
-        /* iPad / Canvas rendering compatibility class */
+        /* rendering compatibility class */
         body.rendering-pdf textarea {
             background-image: none !important;
         }
 
         .checkbox-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px 14px;
             background: var(--bg-page);
             padding: 12px 16px;
             border-radius: 8px;
             border: 1px solid var(--border-light);
             border-left: 4px solid var(--burnt-orange);
+        }
+
+        .checkbox-grid > .checkbox-label {
+            flex: 1 1 calc(50% - 10px);
+            min-width: 200px;
         }
 
         .checkbox-label {
@@ -359,9 +381,17 @@
             margin-top: 28px;
             padding-top: 18px;
             border-top: 2px solid var(--border-light);
-            display: grid;
-            grid-template-columns: 2fr 1fr;
+            display: flex;
+            flex-wrap: wrap;
             gap: 20px;
+        }
+
+        .signoff-grid > .field-group:nth-child(1) { flex: 2 1 60%; min-width: 250px; }
+        .signoff-grid > .field-group:nth-child(2) { flex: 1 1 30%; min-width: 150px; }
+
+        section {
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
         /* Form Footer Bar (Visible on screen and in PDF/Print) */
@@ -382,23 +412,36 @@
 
         @media print {
             body {
-                background: white;
-                padding: 0;
-                margin: 0;
+                background: #ffffff !important;
+                color: #0f172a !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
-            .top-nav {
+            .top-nav, .submission-reminder-box, button, .btn {
                 display: none !important;
+            }
+
+            .forms-wrapper {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .form-card {
+                background: #ffffff !important;
+                padding: 15px 20px !important;
+                border: none !important;
+                box-shadow: none !important;
+                margin-bottom: 0 !important;
             }
 
             body.print-combined .form-card {
                 display: block !important;
                 page-break-after: always;
                 break-after: page;
-                margin-bottom: 0;
-                padding: 20px 25px;
-                border: none;
-                box-shadow: none;
             }
 
             body.print-single .form-card {
@@ -406,17 +449,25 @@
             }
             body.print-single .form-card.active-tab {
                 display: block !important;
-                box-shadow: none;
-                border: none;
-                padding: 20px 25px;
             }
 
             textarea {
                 background-image: none !important;
+                resize: none !important;
+                overflow: visible !important;
             }
 
-            input, textarea, select {
-                border-color: #cbd5e1 !important;
+            input[type="text"],
+            input[type="date"],
+            input[type="time"],
+            select,
+            textarea {
+                border: 1px solid #cbd5e1 !important;
+                background-color: #ffffff !important;
+                color: #0f172a !important;
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                border-radius: 4px !important;
             }
 
             /* Suppress placeholder text when exported to PDF or printed */
@@ -429,6 +480,10 @@
                 color: transparent !important;
                 opacity: 0 !important;
                 -webkit-text-fill-color: transparent !important;
+            }
+
+            .form-footer-bar {
+                page-break-inside: avoid;
             }
         }
 
@@ -1155,17 +1210,85 @@
             });
         }
 
+        // Deep DOM State Preparation prior to PDF rendering or printing
+        function prepareFormDOMForExport(containerEl) {
+            if (!containerEl) return;
+
+            // 1. Sync all input values into DOM value attributes & hide placeholders when values exist
+            containerEl.querySelectorAll('input').forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (input.checked) {
+                        input.setAttribute('checked', 'checked');
+                    } else {
+                        input.removeAttribute('checked');
+                    }
+                } else {
+                    const val = input.value || '';
+                    input.setAttribute('value', val);
+                    if (val) {
+                        input.setAttribute('data-placeholder', input.getAttribute('placeholder') || '');
+                        input.removeAttribute('placeholder');
+                    }
+                }
+            });
+
+            // 2. Sync select dropdown options
+            containerEl.querySelectorAll('select').forEach(select => {
+                const val = select.value;
+                select.querySelectorAll('option').forEach(opt => {
+                    if (opt.value === val) {
+                        opt.setAttribute('selected', 'selected');
+                    } else {
+                        opt.removeAttribute('selected');
+                    }
+                });
+            });
+
+            // 3. Sync textareas and adjust height so zero text is cut off
+            containerEl.querySelectorAll('textarea').forEach(ta => {
+                const val = ta.value || '';
+                ta.textContent = val;
+                if (val) {
+                    ta.setAttribute('data-placeholder', ta.getAttribute('placeholder') || '');
+                    ta.removeAttribute('placeholder');
+                }
+                ta.style.height = 'auto';
+                const scrollH = ta.scrollHeight;
+                if (scrollH > 0) {
+                    ta.style.height = (scrollH + 12) + 'px';
+                }
+            });
+        }
+
+        // Restore placeholder attributes after PDF export completes
+        function restoreDOMAfterExport(containerEl) {
+            if (!containerEl) return;
+            containerEl.querySelectorAll('input, textarea').forEach(el => {
+                if (el.hasAttribute('data-placeholder')) {
+                    el.setAttribute('placeholder', el.getAttribute('data-placeholder'));
+                    el.removeAttribute('data-placeholder');
+                }
+            });
+        }
+
         // Print Functions
         function printSingleForm() {
+            const activeCard = document.getElementById(`form-${currentActiveTab || 'mod'}`);
+            if (activeCard) prepareFormDOMForExport(activeCard);
+            
             document.body.classList.remove('print-combined');
             document.body.classList.add('print-single');
             window.print();
+            if (activeCard) restoreDOMAfterExport(activeCard);
         }
 
         function printCombinedPacket() {
+            document.querySelectorAll('.form-card').forEach(card => prepareFormDOMForExport(card));
+            
             document.body.classList.remove('print-single');
             document.body.classList.add('print-combined');
             window.print();
+            document.querySelectorAll('.form-card').forEach(card => restoreDOMAfterExport(card));
         }
 
         // Demo Data Populator across ALL forms
@@ -1249,26 +1372,35 @@
             const formCard = document.getElementById(`form-${activeTab}`);
             if (!formCard) return;
 
+            // Prepare DOM elements (sync values to attributes, clear placeholders & expand textareas)
+            prepareFormDOMForExport(formCard);
+
             const eventName = (document.querySelector('.event-name-input')?.value || 'Shift_Report').replace(/[^a-zA-Z0-9]/g, '_');
             const eventDate = document.querySelector('.event-date-input')?.value || new Date().toISOString().split('T')[0];
             const tabName = (tabDisplayNames[activeTab] || activeTab).replace(/[^a-zA-Z0-9]/g, '_');
             const filename = `${tabName}_${eventName}_${eventDate}.pdf`;
 
-            // Detect iPad, iPadOS, iPhone or touch Mac devices
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
             document.body.classList.add('rendering-pdf');
 
             try {
-                if (window.html2pdf && !isIOS) {
+                if (window.html2pdf) {
                     const opt = {
                         margin:       [8, 8, 8, 8],
                         filename:     filename,
                         image:        { type: 'jpeg', quality: 0.98 },
-                        html2canvas:  { scale: 1.5, useCORS: true, logging: false },
+                        html2canvas:  { 
+                            scale: 2, 
+                            useCORS: true, 
+                            logging: false,
+                            backgroundColor: '#ffffff',
+                            windowWidth: 960,
+                            scrollX: 0,
+                            scrollY: 0
+                        },
                         jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
                     };
                     await html2pdf().set(opt).from(formCard).save();
+                    restoreDOMAfterExport(formCard);
                     document.body.classList.remove('rendering-pdf');
                     return;
                 }
@@ -1276,10 +1408,10 @@
                 console.warn('html2pdf generation failed on device, using native print fallback:', err);
             }
 
+            restoreDOMAfterExport(formCard);
             document.body.classList.remove('rendering-pdf');
 
-            // Fallback for iPad/iOS Safari or when html2pdf fails:
-            // Native print sheet on iPad lets users pinch-to-zoom on preview or tap Share -> Save as PDF
+            // Fallback:
             printSingleForm();
         }
 
@@ -1303,7 +1435,7 @@
                 if (compInput) completedBy = compInput.value;
             }
 
-            // Check operational status flags for urgent alert indicators (Red Exclamation / Alarm Emoji)
+            // Check operational status flags for urgent alert indicators
             let alertPrefix = '';
             let alertNotice = '';
             const chkDebrief = document.getElementById('mod_chkDebrief')?.checked;
