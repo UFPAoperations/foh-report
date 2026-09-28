@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FOH Shift Report Suite</title>
+    <title>FOH Shift Report Suite - UFPA</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* Century Gothic Font Priority Stack */
@@ -15,8 +15,10 @@
         :root {
             --font-family: 'Century Gothic Local', 'Century Gothic', AppleGothic, sans-serif;
             --primary: #1e293b;        /* Slate 800 */
+            --primary-dark: #0f172a;   /* Slate 900 */
             --accent: #2563eb;         /* Royal Blue */
             --burnt-orange: #ca5116;   /* Rich Burnt Orange */
+            --burnt-orange-dark: #a83f0f;
             --accent-light: #fff7ed;   /* Warm Orange Tint */
             --border: #cbd5e1;         /* Slate 300 */
             --border-light: #e2e8f0;   /* Slate 200 */
@@ -71,7 +73,18 @@
             letter-spacing: 1.5px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+        }
+
+        .rev-stamp-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            background-color: var(--border-light);
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.8px;
+            border: 1px solid var(--border);
         }
 
         .btn-group {
@@ -158,13 +171,14 @@
             margin: 0 auto;
         }
 
+        /* Publication-Grade Form Card Design */
         .form-card {
             display: none; /* Controlled via tab JS or print mode */
             background: var(--bg-card);
-            padding: 40px 48px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-            border: 1px solid var(--border-light);
+            padding: 44px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid #cbd5e1;
             margin-bottom: 24px;
             position: relative;
         }
@@ -173,56 +187,88 @@
             display: block;
         }
 
-        /* Header Component */
+        /* Executive Header Component */
         .form-header {
+            border-bottom: 3px solid var(--burnt-orange);
+            padding-bottom: 16px;
+            margin-bottom: 22px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2.5px solid var(--burnt-orange);
-            padding-bottom: 18px;
-            margin-bottom: 24px;
             gap: 16px;
         }
 
-        .header-brand h1 {
-            font-size: 1.65rem;
+        .header-brand .institution-sub {
+            font-size: 0.72rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.8px;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .header-brand h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
             color: var(--burnt-orange);
             text-transform: uppercase;
+            line-height: 1.15;
         }
 
         .header-brand p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 3px;
+            font-size: 0.88rem;
+            color: var(--primary);
+            margin-top: 4px;
             letter-spacing: 0.5px;
             font-weight: 600;
         }
 
+        .header-rev-stamp {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            background-color: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+            white-space: nowrap;
+        }
+
         /* Section Title Styling */
         .section-title {
-            font-size: 1.05rem;
-            font-weight: 700;
+            font-size: 0.95rem;
+            font-weight: 800;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             display: flex;
             align-items: center;
             gap: 10px;
             margin-top: 24px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             padding-bottom: 6px;
-            border-bottom: 1.5px solid var(--border-light);
+            border-bottom: 2px solid var(--border-light);
         }
 
         .section-title::before {
             content: '';
             display: inline-block;
-            width: 4px;
+            width: 5px;
             height: 16px;
             background-color: var(--burnt-orange);
             border-radius: 2px;
+        }
+
+        /* Top Header Metadata Box */
+        .header-metadata-box {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
         }
 
         /* Flexbox Layouts for 100% Canvas & html2canvas / Chrome PDF Compatibility */
@@ -238,37 +284,37 @@
         .grid-2 {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px 20px;
+            gap: 12px 18px;
         }
         .grid-2 > .field-group, .grid-2 > div {
-            flex: 1 1 calc(50% - 10px);
+            flex: 1 1 calc(50% - 9px);
             min-width: 240px;
         }
 
         .grid-3 {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px 18px;
+            gap: 12px 16px;
         }
         .grid-3 > .field-group, .grid-3 > div {
-            flex: 1 1 calc(33.333% - 12px);
+            flex: 1 1 calc(33.333% - 11px);
             min-width: 200px;
         }
 
         .grid-4 {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px 16px;
+            gap: 10px 14px;
         }
         .grid-4 > .field-group, .grid-4 > div {
-            flex: 1 1 calc(25% - 12px);
+            flex: 1 1 calc(25% - 11px);
             min-width: 140px;
         }
 
         .field-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
 
         .field-group.full-width {
@@ -277,11 +323,11 @@
         }
 
         label {
-            font-size: 0.76rem;
-            font-weight: 700;
-            color: var(--text-muted);
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: #475569;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
         }
 
         input[type="text"],
@@ -294,8 +340,8 @@
             color: var(--text-main);
             background: #ffffff;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 8px 12px;
+            border-radius: 5px;
+            padding: 7px 11px;
             outline: none;
             transition: all 0.2s ease;
             width: 100%;
@@ -348,7 +394,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px 14px;
-            background: var(--bg-page);
+            background: #f8fafc;
             padding: 12px 16px;
             border-radius: 8px;
             border: 1px solid var(--border-light);
@@ -378,7 +424,7 @@
         }
 
         .signoff-grid {
-            margin-top: 28px;
+            margin-top: 26px;
             padding-top: 18px;
             border-top: 2px solid var(--border-light);
             display: flex;
@@ -403,7 +449,7 @@
             justify-content: space-between;
             align-items: center;
             color: var(--burnt-orange);
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             font-weight: 700;
             letter-spacing: 0.5px;
             flex-wrap: wrap;
@@ -420,7 +466,7 @@
                 print-color-adjust: exact !important;
             }
 
-            .top-nav, .submission-reminder-box, button, .btn {
+            .top-nav, button, .btn {
                 display: none !important;
             }
 
@@ -432,7 +478,7 @@
 
             .form-card {
                 background: #ffffff !important;
-                padding: 15px 20px !important;
+                padding: 20px 24px !important;
                 border: none !important;
                 box-shadow: none !important;
                 margin-bottom: 0 !important;
@@ -512,26 +558,9 @@
                 box-shadow: 0 0 0 0 rgba(202, 81, 22, 0.6);
             }
             50% {
-                transform: scale(1.04);
-                box-shadow: 0 0 12px 4px rgba(202, 81, 22, 0.4);
+                transform: scale(1.03);
+                box-shadow: 0 0 12px 3px rgba(202, 81, 22, 0.4);
             }
-        }
-
-        .submission-reminder-box {
-            background-color: #fff7ed;
-            border: 1.5px solid #fed7aa;
-            border-left: 5px solid var(--burnt-orange);
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-top: 20px;
-            margin-bottom: 12px;
-            font-size: 0.84rem;
-            color: #9a3412;
-            line-height: 1.4;
-        }
-
-        .submission-reminder-box strong {
-            color: #7c2d12;
         }
     </style>
 </head>
@@ -540,21 +569,20 @@
     <div class="top-nav">
         <div class="nav-header">
             <div class="nav-title">
-                <span>📋</span> FOH Shift Report Suite
+                <span>📋</span> FOH Shift Report Suite <span class="rev-stamp-badge">REV 260927-K</span>
             </div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="fillSampleData()">Fill Demo Data</button>
                 <button class="btn btn-outline" id="btnExpandWriting" onclick="toggleExpandWritingArea()">↕️ Expand Writing Area</button>
                 <button class="btn btn-outline" onclick="clearActiveForm()">Clear Active</button>
-                <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
-                <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+                <button class="btn btn-primary" onclick="downloadActiveFormPDF()">📄 Save / Download Active PDF</button>
                 <button class="btn btn-outline" onclick="printCombinedPacket()">📄 Save / Print All Combined (PDF)</button>
             </div>
         </div>
 
         <div class="division-info-banner">
             <div>
-                <strong>Multi-Division Mode:</strong> Each department lead completes their specific form tab below and clicks <strong>✉️ Download PDF & Email</strong> to save their PDF and send it to management.
+                <strong>Multi-Division Mode:</strong> Each department lead completes their specific form tab below and clicks <strong>📄 Save / Download Active PDF</strong> to save their completed report.
             </div>
         </div>
 
@@ -570,11 +598,11 @@
     <div class="forms-wrapper">
 
         <!-- Default Blank State / Initial Prompt -->
-        <div class="form-card active-tab" id="form-placeholder" style="text-align: center; padding: 50px 20px;">
-            <div style="font-size: 2.5rem; margin-bottom: 12px;">📋</div>
-            <h2 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Select a Shift Report Form</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 500px; margin: 0 auto;">
-                Please click one of the blue buttons above (<strong>Manager On Duty</strong>, <strong>Head Usher</strong>, <strong>Event Staff Lead</strong>, or <strong>Incident Notes</strong>) to open and complete that specific division report.
+        <div class="form-card active-tab" id="form-placeholder" style="text-align: center; padding: 60px 20px;">
+            <div style="font-size: 2.8rem; margin-bottom: 12px;">📋</div>
+            <h2 style="color: var(--primary); font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px;">Select a Shift Report Form</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 520px; margin: 0 auto; line-height: 1.6;">
+                Please select one of the blue department tabs above (<strong>Manager On Duty</strong>, <strong>Head Usher</strong>, <strong>Event Staff Lead</strong>, or <strong>Incident Notes</strong>) to open and complete that report.
             </p>
         </div>
 
@@ -584,13 +612,15 @@
         <div class="form-card" id="form-mod">
             <header class="form-header">
                 <div class="header-brand">
+                    <div class="institution-sub">University of Florida Performing Arts</div>
                     <h1>Manager On Duty Report</h1>
                     <p>Front of House Executive Shift Overview</p>
                 </div>
+                <div class="header-rev-stamp">REV 260927-K</div>
             </header>
 
-            <!-- Top Header Details -->
-            <section style="margin-bottom: 20px;">
+            <!-- Top Header Details Box -->
+            <div class="header-metadata-box">
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label for="mod_contractCode">Contract Code</label>
@@ -605,10 +635,10 @@
                         <input type="date" id="mod_eventDate" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Status Flags -->
-            <section style="margin-bottom: 24px;">
+            <section style="margin-bottom: 22px;">
                 <label style="margin-bottom: 6px; display: block;">Shift Operational Status Flags</label>
                 <div class="checkbox-grid">
                     <label class="checkbox-label"><input type="checkbox" id="mod_chkDebrief"> Debrief Needed</label>
@@ -647,11 +677,11 @@
             <!-- Attendance & Crew Overview -->
             <section>
                 <div class="section-title">Attendance & Timecards</div>
-                <div class="grid-2" style="margin-bottom: 14px;">
+                <div class="grid-2" style="margin-bottom: 12px;">
                     <div class="field-group"><label>Call Outs</label><input type="text" placeholder="Names & reasons"></div>
                     <div class="field-group"><label>Late Arrivals</label><input type="text" placeholder="Names & times"></div>
                 </div>
-                <div class="grid-2" style="margin-bottom: 14px;">
+                <div class="grid-2" style="margin-bottom: 12px;">
                     <div class="field-group"><label>No Call / No Show</label><input type="text" placeholder="Names"></div>
                     <div class="field-group"><label>Standout Recognitions</label><input type="text" placeholder="Recognized team members"></div>
                 </div>
@@ -664,7 +694,7 @@
             <!-- Departmental Sync & Client Comments -->
             <section>
                 <div class="section-title">Department Sync & Client Feedback</div>
-                <div class="field-group" style="margin-bottom: 14px;">
+                <div class="field-group" style="margin-bottom: 12px;">
                     <label for="mod_deptNotes">MOD Notes</label>
                     <textarea id="mod_deptNotes" class="textarea-large" placeholder="Cross-departmental synchronization notes, facility issues, concessions/bar flow, box office sync..."></textarea>
                 </div>
@@ -686,16 +716,8 @@
                 </div>
             </div>
 
-            <!-- Submission Helper Box -->
-            <div class="submission-reminder-box">
-                <div>
-                    <strong>💡 2-Step Submission Notice:</strong> Clicking <strong>"✉️ Download PDF & Email"</strong> will save the official PDF to your device and open your email draft. <strong style="text-decoration: underline;">Please attach the downloaded PDF to the email before sending!</strong>
-                </div>
-            </div>
-
-            <div style="margin-top: 12px; display: flex; justify-content: flex-end; gap: 10px;">
-                <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
-                <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+            <div style="margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn btn-primary" onclick="downloadActiveFormPDF()">📄 Save / Download Active PDF</button>
             </div>
 
             <!-- Form Footer Bar -->
@@ -712,13 +734,15 @@
         <div class="form-card" id="form-usher">
             <header class="form-header">
                 <div class="header-brand">
+                    <div class="institution-sub">University of Florida Performing Arts</div>
                     <h1>Head Usher Shift Report</h1>
                     <p>Audience Services & House Management Log</p>
                 </div>
+                <div class="header-rev-stamp">REV 260927-K</div>
             </header>
 
-            <!-- Top Header Details -->
-            <section style="margin-bottom: 20px;">
+            <!-- Top Header Details Box -->
+            <div class="header-metadata-box">
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label>Contract Code</label>
@@ -733,7 +757,7 @@
                         <input type="date" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Timings & Attendance -->
             <section>
@@ -746,8 +770,8 @@
                 </div>
 
                 <!-- Set 1 Timings -->
-                <div style="font-weight: 700; font-size: 0.8rem; color: var(--burnt-orange); margin-bottom: 6px;">Show / Set 1 Timings</div>
-                <div class="grid-4" style="margin-bottom: 16px;">
+                <div style="font-weight: 700; font-size: 0.78rem; color: var(--burnt-orange); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Show / Set 1 Timings</div>
+                <div class="grid-4" style="margin-bottom: 14px;">
                     <div class="field-group"><label>Lobby Open</label><input type="time" id="ush_lobbyOpen"></div>
                     <div class="field-group"><label>House Open</label><input type="time" id="ush_houseOpen"></div>
                     <div class="field-group"><label>Event Start</label><input type="time" id="ush_eventStart"></div>
@@ -759,8 +783,8 @@
                 </div>
 
                 <!-- Optional Set 2 Timings -->
-                <div id="set2_container" style="display: none; background-color: #f8fafc; padding: 12px; border-radius: 8px; border: 1px dashed var(--burnt-orange); margin-bottom: 16px;">
-                    <div style="font-weight: 700; font-size: 0.8rem; color: var(--burnt-orange); margin-bottom: 6px;">Show / Set 2 Timings</div>
+                <div id="set2_container" style="display: none; background-color: #f8fafc; padding: 12px; border-radius: 8px; border: 1px dashed var(--burnt-orange); margin-bottom: 14px;">
+                    <div style="font-weight: 700; font-size: 0.78rem; color: var(--burnt-orange); text-transform: uppercase; margin-bottom: 6px;">Show / Set 2 Timings</div>
                     <div class="grid-4">
                         <div class="field-group"><label>Lobby Open (Set 2)</label><input type="time" id="ush_lobbyOpen_s2"></div>
                         <div class="field-group"><label>House Open (Set 2)</label><input type="time" id="ush_houseOpen_s2"></div>
@@ -774,8 +798,8 @@
                 </div>
 
                 <!-- Optional Set 3 Timings -->
-                <div id="set3_container" style="display: none; background-color: #f8fafc; padding: 12px; border-radius: 8px; border: 1px dashed var(--burnt-orange); margin-bottom: 16px;">
-                    <div style="font-weight: 700; font-size: 0.8rem; color: var(--burnt-orange); margin-bottom: 6px;">Show / Set 3 Timings</div>
+                <div id="set3_container" style="display: none; background-color: #f8fafc; padding: 12px; border-radius: 8px; border: 1px dashed var(--burnt-orange); margin-bottom: 14px;">
+                    <div style="font-weight: 700; font-size: 0.78rem; color: var(--burnt-orange); text-transform: uppercase; margin-bottom: 6px;">Show / Set 3 Timings</div>
                     <div class="grid-4">
                         <div class="field-group"><label>Lobby Open (Set 3)</label><input type="time" id="ush_lobbyOpen_s3"></div>
                         <div class="field-group"><label>House Open (Set 3)</label><input type="time" id="ush_houseOpen_s3"></div>
@@ -788,7 +812,7 @@
                     </div>
                 </div>
 
-                <div class="grid-2" style="margin-bottom: 14px;">
+                <div class="grid-2" style="margin-bottom: 12px;">
                     <div class="field-group"><label for="ush_houseCount">House Count (Total Attendance)</label><input type="text" id="ush_houseCount" placeholder="e.g. 1,420 guests"></div>
                     <div class="field-group"><label for="ush_adaCount">ADA Patrons Served</label><input type="text" id="ush_adaCount" placeholder="e.g. 14 wheelchair escorts, 6 ALDs"></div>
                 </div>
@@ -812,7 +836,7 @@
             <!-- Head Usher Detailed Operational Notes -->
             <section>
                 <div class="section-title">Head Usher Operational Notes</div>
-                <div class="field-group" style="margin-bottom: 14px;">
+                <div class="field-group" style="margin-bottom: 12px;">
                     <label for="ush_detailedNotes">Usher Deployment, Late Seating Holds & Crowd Dynamics</label>
                     <textarea id="ush_detailedNotes" class="textarea-xlarge" placeholder="Detail door opening timing, late seating hold execution, usher positioning challenges, seating discrepancies, patron inquiries, and crowd mood..."></textarea>
                 </div>
@@ -834,16 +858,8 @@
                 </div>
             </div>
 
-            <!-- Submission Helper Box -->
-            <div class="submission-reminder-box">
-                <div>
-                    <strong>💡 2-Step Submission Notice:</strong> Clicking <strong>"✉️ Download PDF & Email"</strong> will save the official PDF to your device and open your email draft. <strong style="text-decoration: underline;">Please attach the downloaded PDF to the email before sending!</strong>
-                </div>
-            </div>
-
-            <div style="margin-top: 12px; display: flex; justify-content: flex-end; gap: 10px;">
-                <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
-                <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+            <div style="margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn btn-primary" onclick="downloadActiveFormPDF()">📄 Save / Download Active PDF</button>
             </div>
 
             <!-- Form Footer Bar -->
@@ -860,13 +876,15 @@
         <div class="form-card" id="form-estaff">
             <header class="form-header">
                 <div class="header-brand">
+                    <div class="institution-sub">University of Florida Performing Arts</div>
                     <h1>Event Staff Lead Report</h1>
                     <p>Security, Screening & Perimeter Operations Log</p>
                 </div>
+                <div class="header-rev-stamp">REV 260927-K</div>
             </header>
 
-            <!-- Top Header Details -->
-            <section style="margin-bottom: 20px;">
+            <!-- Top Header Details Box -->
+            <div class="header-metadata-box">
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label>Contract Code</label>
@@ -881,12 +899,12 @@
                         <input type="date" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Event Staff Crew Roster & Counts -->
             <section>
                 <div class="section-title">Event Staff Roster & Crew Counts</div>
-                <div class="grid-3" style="margin-bottom: 14px;">
+                <div class="grid-3" style="margin-bottom: 12px;">
                     <div class="field-group"><label for="es_lead">Event Staff Lead</label><input type="text" id="es_lead" placeholder="Lead Name"></div>
                     <div class="field-group"><label for="es_count1">Event Staff 1 Count</label><input type="text" id="es_count1" placeholder="Crew Count"></div>
                     <div class="field-group"><label for="es_count2">Event Staff 2 Count</label><input type="text" id="es_count2" placeholder="Crew Count"></div>
@@ -896,7 +914,7 @@
             <!-- Department Security Posts -->
             <section>
                 <div class="section-title">Department Posts & Security Coverage</div>
-                <div class="grid-2" style="margin-bottom: 14px;">
+                <div class="grid-2" style="margin-bottom: 12px;">
                     <div class="field-group"><label>Parking Posts & Operational Notes</label><textarea class="textarea-small" placeholder="Staffing, traffic flow, garage entry rates..."></textarea></div>
                     <div class="field-group"><label>Evolv / FOH Security Posts & Notes</label><textarea class="textarea-small" placeholder="Screening flow, bag checks, magnetometers..."></textarea></div>
                     <div class="field-group"><label>BOH Security Posts & Notes</label><textarea class="textarea-small" placeholder="Access control, artist entrance, stage door..."></textarea></div>
@@ -907,11 +925,11 @@
             <!-- Law Enforcement Detail -->
             <section>
                 <div class="section-title">Law Enforcement Detail</div>
-                <div class="grid-2" style="margin-bottom: 12px;">
+                <div class="grid-2" style="margin-bottom: 10px;">
                     <div class="field-group"><label for="es_ufpd">UFPD On-Duty</label><input type="text" id="es_ufpd" placeholder="Officer count, names, & posts"></div>
                     <div class="field-group"><label for="es_nonUfpd">Non-UF On-Duty</label><input type="text" id="es_nonUfpd" placeholder="Agency name, officer count, & details"></div>
                 </div>
-                <div class="field-group" style="margin-bottom: 14px;">
+                <div class="field-group" style="margin-bottom: 12px;">
                     <label>Law Enforcement Operational Notes</label>
                     <textarea class="textarea-small" placeholder="Police assistance, traffic detail, escorts, or security calls..."></textarea>
                 </div>
@@ -938,16 +956,8 @@
                 </div>
             </div>
 
-            <!-- Submission Helper Box -->
-            <div class="submission-reminder-box">
-                <div>
-                    <strong>💡 2-Step Submission Notice:</strong> Clicking <strong>"✉️ Download PDF & Email"</strong> will save the official PDF to your device and open your email draft. <strong style="text-decoration: underline;">Please attach the downloaded PDF to the email before sending!</strong>
-                </div>
-            </div>
-
-            <div style="margin-top: 12px; display: flex; justify-content: flex-end; gap: 10px;">
-                <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
-                <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+            <div style="margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn btn-primary" onclick="downloadActiveFormPDF()">📄 Save / Download Active PDF</button>
             </div>
 
             <!-- Form Footer Bar -->
@@ -964,13 +974,15 @@
         <div class="form-card" id="form-incident">
             <header class="form-header">
                 <div class="header-brand">
+                    <div class="institution-sub">University of Florida Performing Arts</div>
                     <h1 style="color: #dc2626;">Incident Notes Log</h1>
                     <p>Universal Incident & Special Circumstance Log (Medical, Security, Patron, Facility)</p>
                 </div>
+                <div class="header-rev-stamp">REV 260927-K</div>
             </header>
 
-            <!-- Top Header Details -->
-            <section style="margin-bottom: 20px;">
+            <!-- Top Header Details Box -->
+            <div class="header-metadata-box">
                 <div class="grid-header-3">
                     <div class="field-group">
                         <label>Contract Code</label>
@@ -985,12 +997,12 @@
                         <input type="date" class="event-date-input" onchange="syncEventDates(this.value, this)">
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Reporter Metadata -->
             <section>
                 <div class="section-title">Reporting Person Details</div>
-                <div class="grid-3" style="margin-bottom: 14px;">
+                <div class="grid-3" style="margin-bottom: 12px;">
                     <div class="field-group"><label for="inc_reporterName">Reporting Person Name</label><input type="text" id="inc_reporterName" placeholder="Full Name"></div>
                     <div class="field-group"><label for="inc_reporterRole">Role / Department</label><input type="text" id="inc_reporterRole" placeholder="e.g. Usher, E-Staff, Guest Services"></div>
                     <div class="field-group"><label for="inc_reporterPhone">Contact Phone / Email</label><input type="text" id="inc_reporterPhone" placeholder="Phone Number"></div>
@@ -1000,7 +1012,7 @@
             <!-- Incident Metadata -->
             <section>
                 <div class="section-title">Incident Details & Classification</div>
-                <div class="grid-3" style="margin-bottom: 14px;">
+                <div class="grid-3" style="margin-bottom: 12px;">
                     <div class="field-group">
                         <label for="inc_time">Exact Time of Incident</label>
                         <input type="time" id="inc_time">
@@ -1023,7 +1035,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="grid-2" style="margin-bottom: 14px;">
+                <div class="grid-2" style="margin-bottom: 12px;">
                     <div class="field-group">
                         <label for="inc_individuals">Patron(s) / Individuals Involved</label>
                         <input type="text" id="inc_individuals" placeholder="Names, seat numbers, phone numbers">
@@ -1038,7 +1050,7 @@
             <!-- Narrative Log -->
             <section>
                 <div class="section-title">Detailed Incident Narrative</div>
-                <div class="field-group" style="margin-bottom: 14px;">
+                <div class="field-group" style="margin-bottom: 12px;">
                     <label for="inc_narrative" style="color: #dc2626;">Chronological Account of Events & Actions Taken</label>
                     <textarea id="inc_narrative" class="textarea-xlarge" placeholder="Provide a thorough step-by-step chronological account: What happened? Who was notified? What immediate actions were taken? What was the final resolution or transport status? Include exact quotes or witness observations if available..."></textarea>
                 </div>
@@ -1060,16 +1072,8 @@
                 </div>
             </div>
 
-            <!-- Submission Helper Box -->
-            <div class="submission-reminder-box">
-                <div>
-                    <strong>💡 2-Step Submission Notice:</strong> Clicking <strong>"✉️ Download PDF & Email"</strong> will save the official PDF to your device and open your email draft. <strong style="text-decoration: underline;">Please attach the downloaded PDF to the email before sending!</strong>
-                </div>
-            </div>
-
-            <div style="margin-top: 12px; display: flex; justify-content: flex-end; gap: 10px;">
-                <button class="btn btn-outline" onclick="downloadActiveFormPDF()">📄 Save / Print Active PDF</button>
-                <button class="btn btn-primary" onclick="emailActiveForm()">✉️ Download PDF & Email</button>
+            <div style="margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button class="btn btn-primary" onclick="downloadActiveFormPDF()">📄 Save / Download Active PDF</button>
             </div>
 
             <!-- Form Footer Bar -->
@@ -1413,62 +1417,6 @@
 
             // Fallback:
             printSingleForm();
-        }
-
-        // Download PDF and launch pre-addressed email client draft
-        function emailActiveForm() {
-            if (!currentActiveTab) {
-                alert('Please select a form tab first before emailing.');
-                return;
-            }
-
-            const contractCode = (document.querySelector('.contract-code-input')?.value || '').trim() || 'N/A';
-            const eventName = (document.querySelector('.event-name-input')?.value || '').trim() || 'Event';
-            const eventDate = document.querySelector('.event-date-input')?.value || '';
-            const reportName = tabDisplayNames[currentActiveTab] || 'FOH Shift Report';
-
-            // Find completedBy name if entered
-            let completedBy = '';
-            const activeCard = document.getElementById(`form-${currentActiveTab}`);
-            if (activeCard) {
-                const compInput = activeCard.querySelector('input[id$="_completedBy"]');
-                if (compInput) completedBy = compInput.value;
-            }
-
-            // Check operational status flags for urgent alert indicators
-            let alertPrefix = '';
-            let alertNotice = '';
-            const chkDebrief = document.getElementById('mod_chkDebrief')?.checked;
-            const chkIncident = document.getElementById('mod_chkIncident')?.checked;
-
-            const flaggedItems = [];
-            if (chkDebrief) flaggedItems.push('DEBRIEF NEEDED');
-            if (chkIncident) flaggedItems.push('MAJOR INCIDENT OCCURRED');
-
-            if (flaggedItems.length > 0) {
-                alertPrefix = `🚨 [${flaggedItems.join(' & ')}] `;
-                alertNotice = `\n\n🚨 ATTENTION REQUIRED / FLAG NOTICE:\nThis report has been flagged for: ${flaggedItems.join(' | ')}. Please review the attached PDF immediately.`;
-            }
-
-            // Step 1: Trigger PDF download
-            downloadActiveFormPDF();
-
-            // Step 2: Open mail draft pre-filled with Recipients, Subject, and Body
-            const recipients = 'gposner@performingarts.ufl.edu,mburkett@performingarts.ufl.edu,AlexandraBaxter@performingarts.ufl.edu';
-            const subject = `${alertPrefix}${reportName} - Contract Code: ${contractCode} - ${eventName}`;
-            
-            let body = `Hello,\n\nPlease find attached the completed ${reportName} for ${eventName}`;
-            if (eventDate) body += ` on ${eventDate}`;
-            body += `.\n\nContract Code: ${contractCode}`;
-            if (completedBy) body += `\nSubmitted By: ${completedBy}`;
-            if (alertNotice) body += alertNotice;
-            body += `\n\n(Note: The PDF report has been downloaded to your device. Please attach it to this email.)\n\nThank you!`;
-
-            const mailtoUrl = `mailto:${recipients}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-            setTimeout(() => {
-                window.location.href = mailtoUrl;
-            }, 600);
         }
     </script>
 </body>
