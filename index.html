@@ -460,7 +460,7 @@
     <div class="top-nav">
         <div class="nav-header">
             <div class="nav-title">
-                <span>📋</span> FOH Shift Report Suite <span class="rev-stamp-badge">REV 260927-T</span>
+                <span>📋</span> FOH Shift Report Suite <span class="rev-stamp-badge">REV 260927-U</span>
             </div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="fillSampleData()">Fill Demo Data</button>
@@ -497,7 +497,7 @@
                 <h1>Manager On Duty Report</h1>
                 <p>Front of House Executive Shift Overview</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-T</div>
+            <div class="header-rev-stamp">REV 260927-U</div>
         </header>
 
         <!-- Top Header Details -->
@@ -637,7 +637,7 @@
                 <h1>Head Usher Shift Report</h1>
                 <p>Audience Services & House Management Log</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-T</div>
+            <div class="header-rev-stamp">REV 260927-U</div>
         </header>
 
         <!-- Top Header Details -->
@@ -761,7 +761,7 @@
                 <h1>Event Staff Lead Report</h1>
                 <p>Security, Screening & Perimeter Operations Log</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-T</div>
+            <div class="header-rev-stamp">REV 260927-U</div>
         </header>
 
         <!-- Top Header Details -->
@@ -859,7 +859,7 @@
                 <h1 style="color: #dc2626;">Incident Notes Log</h1>
                 <p>Universal Incident & Special Circumstance Log (Medical, Security, Patron, Facility)</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-T</div>
+            <div class="header-rev-stamp">REV 260927-U</div>
         </header>
 
         <!-- Top Header Details -->
@@ -1021,27 +1021,6 @@
             });
         }
 
-        function downloadActiveFormPDF() {
-            const activeCard = document.querySelector('.form-card.active');
-            if (!activeCard) return;
-
-            prepareFormDOMForExport(activeCard);
-
-            const contractCode = document.getElementById('mod_contractCode').value || 'REPORT';
-            const eventName = document.getElementById('mod_eventName').value || 'EVENT';
-            const filename = `UFPA_Shift_Report_${contractCode}_${eventName}.pdf`.replace(/[^a-zA-Z0-9_\-.]/g, '_');
-
-            const opt = {
-                margin:       [10, 10, 10, 10],
-                filename:     filename,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0 },
-                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(activeCard).save();
-        }
-
         function getActiveMetaValues() {
             const contractCode = document.getElementById('mod_contractCode')?.value || 
                                  document.getElementById('ush_contractCode')?.value || 
@@ -1059,6 +1038,28 @@
                               document.getElementById('inc_eventDate')?.value || new Date().toISOString().split('T')[0];
 
             return { contractCode, eventName, eventDate };
+        }
+
+        function downloadActiveFormPDF() {
+            const activeCard = document.querySelector('.form-card.active');
+            if (!activeCard) return;
+
+            prepareFormDOMForExport(activeCard);
+
+            const { contractCode, eventName, eventDate } = getActiveMetaValues();
+            const cleanContract = (contractCode || 'CONTRACT').trim().replace(/[^a-zA-Z0-9_\-]/g, '_');
+            const cleanEvent = (eventName || 'EVENT').trim().replace(/[^a-zA-Z0-9_\-]/g, '_');
+            const filename = `${cleanContract}_UFPA_Shift_Report_${cleanEvent}_${eventDate}.pdf`;
+
+            const opt = {
+                margin:       [10, 10, 10, 10],
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0 },
+                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(activeCard).save();
         }
 
         function emailActiveForm() {
