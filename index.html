@@ -460,7 +460,7 @@
     <div class="top-nav">
         <div class="nav-header">
             <div class="nav-title">
-                <span>📋</span> FOH Shift Report Suite <span class="rev-stamp-badge">REV 260927-S</span>
+                <span>📋</span> FOH Shift Report Suite <span class="rev-stamp-badge">REV 260927-T</span>
             </div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="fillSampleData()">Fill Demo Data</button>
@@ -497,7 +497,7 @@
                 <h1>Manager On Duty Report</h1>
                 <p>Front of House Executive Shift Overview</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-S</div>
+            <div class="header-rev-stamp">REV 260927-T</div>
         </header>
 
         <!-- Top Header Details -->
@@ -623,7 +623,7 @@
 
         <div class="form-footer-bar">
             <span class="footer-brand">University of Florida Performing Arts - Gainesville, Florida</span>
-            <span id="mod_footerContractSync">CTR Code: --</span>
+            <span id="mod_footerContractSync">CONTRACT CODE: --</span>
         </div>
     </div>
 
@@ -637,7 +637,7 @@
                 <h1>Head Usher Shift Report</h1>
                 <p>Audience Services & House Management Log</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-S</div>
+            <div class="header-rev-stamp">REV 260927-T</div>
         </header>
 
         <!-- Top Header Details -->
@@ -747,7 +747,7 @@
 
         <div class="form-footer-bar">
             <span class="footer-brand">University of Florida Performing Arts - Gainesville, Florida</span>
-            <span id="ush_footerContractSync">CTR Code: --</span>
+            <span id="ush_footerContractSync">CONTRACT CODE: --</span>
         </div>
     </div>
 
@@ -761,7 +761,7 @@
                 <h1>Event Staff Lead Report</h1>
                 <p>Security, Screening & Perimeter Operations Log</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-S</div>
+            <div class="header-rev-stamp">REV 260927-T</div>
         </header>
 
         <!-- Top Header Details -->
@@ -845,7 +845,7 @@
 
         <div class="form-footer-bar">
             <span class="footer-brand">University of Florida Performing Arts - Gainesville, Florida</span>
-            <span id="es_footerContractSync">CTR Code: --</span>
+            <span id="es_footerContractSync">CONTRACT CODE: --</span>
         </div>
     </div>
 
@@ -859,7 +859,7 @@
                 <h1 style="color: #dc2626;">Incident Notes Log</h1>
                 <p>Universal Incident & Special Circumstance Log (Medical, Security, Patron, Facility)</p>
             </div>
-            <div class="header-rev-stamp">REV 260927-S</div>
+            <div class="header-rev-stamp">REV 260927-T</div>
         </header>
 
         <!-- Top Header Details -->
@@ -941,7 +941,7 @@
 
         <div class="form-footer-bar">
             <span class="footer-brand">University of Florida Performing Arts - Gainesville, Florida</span>
-            <span id="inc_footerContractSync">CTR Code: --</span>
+            <span id="inc_footerContractSync">CONTRACT CODE: --</span>
         </div>
     </div>
 
@@ -968,7 +968,7 @@
             });
             ['mod_footerContractSync', 'ush_footerContractSync', 'es_footerContractSync', 'inc_footerContractSync'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.textContent = 'CTR Code: ' + (val || '--');
+                if (el) el.textContent = 'CONTRACT CODE: ' + (val || '--');
             });
         }
 
